@@ -719,7 +719,28 @@ class RainwaveDatabase(object):
 			u'join album_unrated_counts using (album_id)')
 		self.rcur.execute(sql, (user_id, cid))
 		for r in self.rcur:
+<<<<<<< HEAD
+			song_ids.extend(r)
+		return song_ids
+		
+	def get_unrated_songs_myth(self, user_id, cid):
+		'''Get unrated songs, each in a different album, prioritizing albums with the most unrated songs first.'''
 
+		m = u'Getting unrated songs for user {} on channel {}'
+		log.info(m.format(user_id, cid))
+
+		song_ids = []
+		sql = (u'select song_id from (select song_id, count(album_id) as unrated_per_album '
+			u'song_available, song_releasetime from rw_songs where sid = %s and '
+			u'song_verified is true and song_rating_id not in (select song_rating_id '
+			u'from rw_songratings where user_id = %s) group by album_id order by unrated_per_album desc,  '
+			u'album_id, song_available desc, song_releasetime) as unrated order by '
+			u'song_available desc, song_releasetime')
+		self.rcur.execute(sql, (cid, user_id))
+		for r in self.rcur:
+			song_ids.extend(r)
+		return song_ids
+=======
 			unrated.append({
 				u'id': int(r[0]),
 				u'album_id': int(r[1]),
@@ -728,6 +749,7 @@ class RainwaveDatabase(object):
 				u'unrated_songs_in_album': int(r[4])
 			})
 		return unrated
+>>>>>>> upstream/master
 
 	def request_playlist_refresh(self, cid):
 		'''Request a playlist refresh for a channel'''

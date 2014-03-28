@@ -2,5 +2,7 @@
 *.log
 *.pyc
 *.sqlite*
-*.sublime-*
+*.sublime*
 .DS_Store
+.vagrant
+.venv
